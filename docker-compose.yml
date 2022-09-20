@@ -1,0 +1,29 @@
+version: '3.7'
+
+networks:
+  shared-network:
+    driver: bridge
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mockdacs
+    networks:
+      - shared-network
+  db:
+    image: postgres
+    container_name: postgres
+    networks:
+      - shared-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mockdacs
+    ports:
+      - "5432:5432"
+    restart: always
